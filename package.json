@@ -1,0 +1,20 @@
+{
+  "name": "ejercicios-parte3",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/Kyre0n/Ejercicios-parte3#readme",
+  "bugs": {
+    "url": "https://github.com/Kyre0n/Ejercicios-parte3/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kyre0n/Ejercicios-parte3.git"
+  },
+  "license": "ISC",
+  "author": "Samuel Alvarez",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
