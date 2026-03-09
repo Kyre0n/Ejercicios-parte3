@@ -27,6 +27,16 @@ let persons = [
     }
 ]
 
+const requestLogger = (request, response, next) => {
+  console.log('Method:', request.method)
+  console.log('Path:  ', request.path)
+  console.log('Body:  ', request.body)
+  console.log('---')
+  next()
+}
+
+app.use(requestLogger)
+
 app.get('/api/persons', (request, response) => {
     response.json(persons)
 })
@@ -57,9 +67,15 @@ app.post('/api/persons', (request, response) => {
   const body = request.body
   console.log(body)
 
-  if (!body.name) {
+  const existingPerson = persons.find(person => person.name === body.name)
+
+  if (!body.name || !body.number) {
     return response.status(400).json({
-      error: 'content missing'
+      error: 'name or number missing'
+    })
+  } else if (existingPerson) {
+    return response.status(400).json({
+      error: 'name must be unique'
     })
   }
 
@@ -73,6 +89,12 @@ app.post('/api/persons', (request, response) => {
 
   response.json(person)
 })
+
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
+
+app.use(unknownEndpoint)
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
