@@ -1,0 +1,7 @@
+POST https://ejercicios-parte3-el37.onrender.com/api/persons HTTP/1.1
+content-type: application/json
+
+{
+    "name": "asdf",
+    "number": "1234"
+}
