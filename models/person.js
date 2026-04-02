@@ -22,7 +22,7 @@ personSchema.set('toJSON', {
   transform: (document, returnedObject) => {
     returnedObject.id = returnedObject._id.toString()
     delete returnedObject._id
-    delete returnedObject.id
+    // Mantener returnedObject.id para que el frontend use el id para eliminar/actualizar.
     delete returnedObject.__v
   }
 })
