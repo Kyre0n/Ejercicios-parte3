@@ -56,12 +56,30 @@ app.get('/api/persons', (request, response) => {
 })
 
 app.get('/info', (request, response) => {
+  Person.find({}).then(persons => {
+    response.send(`Phonebook has info for ${persons.length} people <br> ${new Date()}`)
+  })
+})
+/*
   const quantity = persons.length
   const requestTime = new Date()
   response.send(`<p>Phonebook has info for ${quantity} people</p><p>${requestTime}</p>`)
 })
+*/
 
-app.get('/api/persons/:id', (request, response) => {
+app.get('/api/persons/:id', (request, response, next) => {
+  Person.findById(request.params.id)
+    .then(person => {
+      if (person) {
+        response.json(person)
+      } else {
+        response.status(404).end()
+      }
+    })
+    .catch(error => next(error))
+  })
+  
+  /*
   const id = Number(request.params.id)
   const person = persons.find(person => person.id === id)
   if (person) {
@@ -70,6 +88,7 @@ app.get('/api/persons/:id', (request, response) => {
     response.status(404).end()
   }
 })
+*/
 
 /*
 app.delete('/api/persons/:id', (request, response) => {
