@@ -12,24 +12,24 @@ app.use(express.static('dist'))
 
 app.use(express.json())
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
-morgan.token('body', function (req, res) {
+morgan.token('body', function (req) {
   return JSON.stringify(req.body)
 })
 
 let persons = [
-    { 
+    {
       "id": 1,
-      "name": "Arto Hellas", 
+      "name": "Arto Hellas",
       "number": "040-123456"
     },
-    { 
+    {
       "id": 2,
-      "name": "Ada Lovelace", 
+      "name": "Ada Lovelace",
       "number": "39-44-5323523"
     },
-    { 
+    {
       "id": 3,
-      "name": "Dan Abramov", 
+      "name": "Dan Abramov",
       "number": "12-43-234345"
     },
     {
@@ -39,7 +39,7 @@ let persons = [
     }
 ]
 
-const requestLogger = (request, response, next) => {
+const requestLogger = (request, next) => {
   console.log('Method:', request.method)
   console.log('Path:  ', request.path)
   console.log('Body:  ', request.body)
@@ -83,7 +83,7 @@ app.delete('/api/persons/:id', (request, response) => {
 
 app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndDelete(request.params.id)
-    .then(result => {
+    .then(() => {
       response.status(204).end()
     })
     .catch(error => next(error))
@@ -135,13 +135,13 @@ app.post('/api/persons', (request, response) => {
 app.post('/api/persons', (request, response, next) => {
   const body = request.body
 
-  
+
 
   if (!body.name || !body.number) {
     return response.status(400).json({
       error: 'name or number missing'
     })
-  } 
+  }
 
   const person = new Person({
     "name": body.name,
