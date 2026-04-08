@@ -56,16 +56,10 @@ app.get('/api/persons', (request, response) => {
 })
 
 app.get('/info', (request, response) => {
-  Person.find({}).then(persons => {
-    response.send(`Phonebook has info for ${persons.length} people <br> ${new Date()}`)
-  })
-})
-/*
   const quantity = persons.length
   const requestTime = new Date()
   response.send(`<p>Phonebook has info for ${quantity} people</p><p>${requestTime}</p>`)
 })
-*/
 
 app.get('/api/persons/:id', (request, response, next) => {
   Person.findById(request.params.id)
@@ -77,18 +71,7 @@ app.get('/api/persons/:id', (request, response, next) => {
       }
     })
     .catch(error => next(error))
-  })
-  
-  /*
-  const id = Number(request.params.id)
-  const person = persons.find(person => person.id === id)
-  if (person) {
-    response.json(person)
-  } else {
-    response.status(404).end()
-  }
 })
-*/
 
 /*
 app.delete('/api/persons/:id', (request, response) => {
@@ -149,7 +132,7 @@ app.post('/api/persons', (request, response) => {
 })
 */
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
   const body = request.body
 
   
@@ -174,9 +157,11 @@ app.post('/api/persons', (request, response) => {
     })
   }*/
 
-  person.save().then(savedPerson => {
-    response.json(savedPerson)
-  })
+  person.save()
+    .then(savedPerson => {
+      response.json(savedPerson)
+    })
+    .catch(error => next(error))
 })
 
 const unknownEndpoint = (request, response) => {
@@ -190,7 +175,11 @@ const errorHandler = (error, request, response, next) => {
 
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' })
-  } 
+  }
+
+  if (error.name === 'ValidationError') {
+    return response.status(400).json({ error: error.message })
+  }
 
   next(error)
 }

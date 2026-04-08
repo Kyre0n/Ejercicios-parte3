@@ -52,7 +52,14 @@ const App = () => {
           setTimeout(() => {
             setNotification({ message: null, error: false })
           }, 5000)
-      })
+        })
+        .catch(error =>  {
+          const errorMessage = error.response?.data?.error || error.message || 'An error occurred'
+          setNotification({ message: errorMessage, error: true })
+          setTimeout(() => {
+            setNotification({ message: null, error: false })
+          }, 5000)
+        })
       setNewName('')
       setNewNumber('')
       
