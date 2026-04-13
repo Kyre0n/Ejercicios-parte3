@@ -39,7 +39,7 @@ let persons = [
     }
 ]
 
-const requestLogger = (request, next) => {
+const requestLogger = (request, response, next) => {
   console.log('Method:', request.method)
   console.log('Path:  ', request.path)
   console.log('Body:  ', request.body)
@@ -49,10 +49,12 @@ const requestLogger = (request, next) => {
 
 app.use(requestLogger)
 
-app.get('/api/persons', (request, response) => {
-  Person.find({}).then(persons => {
-    response.json(persons)
-  })
+app.get('/api/persons', (request, response, next) => {
+  Person.find({})
+    .then(persons => {
+      response.json(persons)
+    })
+    .catch(error => next(error))
 })
 
 app.get('/info', (request, response) => {
